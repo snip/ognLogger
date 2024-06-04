@@ -31,6 +31,10 @@ func main() {
 	fmt.Println(softwareName+" "+softwareVersion+" Copyright (C) 2024 Sebastien Chaumontet - https://github.com/snip/ognLogger")
 	fmt.Println("This program comes with ABSOLUTELY NO WARRANTY.")
 	fmt.Println("This is free software, and you are welcome to redistribute it under GPL v3.0 conditions.\n")
+	err := os.Mkdir("log", 0750)
+	if err != nil && !os.IsExist(err) {
+		log.Fatal(err)
+	}
 	Listen(process_message)
 }
 
@@ -39,7 +43,7 @@ func process_message(aprs_line string) {
 	currentDay := currentTime.Format("2006-01-02")
 	//fmt.Print(aprs_line)
 	fmt.Print(".")
-	f, err := os.OpenFile(currentDay+"-aprs.log", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	f, err := os.OpenFile("log/"+currentDay+"-aprs.log", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 	if err != nil {
 		log.Fatal(err)
 	}
